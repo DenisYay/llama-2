@@ -14,7 +14,6 @@ class Llama2Model(rh.Module):
         self.engine = None
     
     def initialize_engine(self) -> None:
-        """Initialize the AsyncLLMEngine from the command line arguments."""
         from vllm.engine.arg_utils import AsyncEngineArgs
         from vllm.engine.async_llm_engine import AsyncLLMEngine
         
