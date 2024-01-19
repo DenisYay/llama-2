@@ -49,7 +49,7 @@ async def main():
     print(f"\n\n... Initializing LLaMa-2 model ...\n")
     remote_llama2_model = Llama2Model().get_or_to(system=gpu, env=env, name="llama-2-model")
     print(f"\n\n... Succefully initialized LLaMa-2 model. Running generation ...\n")
-    ans =  await remote_llama2_model.generate(prompt="Wheels on the bus go", stream=False, temperature=0.8, top_p=0.95, max_tokens=200})
+    ans =  await remote_llama2_model.generate(prompt="Wheels on the bus go", stream=False, temperature=0.8, top_p=0.95, max_tokens=200)
     for text_output in ans:
         print(f"... Generated Text:\n{text_output}\n")
 
