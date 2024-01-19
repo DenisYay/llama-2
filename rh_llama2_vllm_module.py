@@ -27,18 +27,8 @@ class Llama2Model(rh.Module):
     async def generate(self, prompt: str, stream: bool = True, sampling_params: Optional[dict] = None) -> Any:
         from vllm.sampling_params import SamplingParams
         from vllm.utils import random_uuid
-        from typing import AsyncGenerator
-        import json
-
-        """Generate completion for the request.
-        - prompt: the prompt to use for the generation.
-        - stream: whether to stream the results or not.
-        - other fields: the sampling parameters (See `SamplingParams` for details).
-        """
-        if isinstance(sampling_params, dict):
-          sampling_params = SamplingParams(**sampling_params)  # Unpack dictionary
-        else:
-          raise ValueError("Invalid type for sampling_params")
+        
+        sampling_params = SamplingParams(**sampling_params)  # Unpack dictionary
         request_id = random_uuid()
 
         if not self.engine:
