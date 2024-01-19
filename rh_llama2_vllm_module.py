@@ -4,7 +4,7 @@
 # To run: python rh_llama2_vllm_module.py
 
 import runhouse as rh
-from typing import AsyncGenerator, Generator, Optional, Any
+from typing import Optional, Any
 import asyncio
 import json
 
@@ -48,31 +48,6 @@ class Llama2Model(rh.Module):
 
         results_generator = self.engine.generate(prompt, sampling_params, request_id)
     
-        async def stream_results() -> AsyncGenerator[bytes, None]:
-          try:
-              print("\n\nBefore going to async for loop\n")
-
-              async for request_output in results_generator:
-                  print(f"Debug: request_output = {request_output}")
-
-                  prompt = request_output.prompt
-                  text_outputs = [
-                      prompt + output.text for output in request_output.outputs
-                  ]
-                  print(f"... Async Generated Text:\n{text_outputs}\n")
-
-                  ret = {"text": text_outputs}
-                  yield (json.dumps(ret) + "\0").encode("utf-8")
-
-          except Exception as e:
-            print(f"Error in stream_results: {e}")
-            raise
-        
-        # Streaming case
-        if stream:
-            return stream_results()
-
-        # Non-streaming case
         final_output = None
         async for request_output in results_generator:
             final_output = request_output
