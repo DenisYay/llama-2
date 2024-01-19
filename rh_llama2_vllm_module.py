@@ -43,7 +43,7 @@ class Llama2Model(rh.Module):
           raise ValueError("Invalid type for sampling_params")
         request_id = random_uuid()
 
-        if self.engine is None:
+        if not self.engine:
           self.initialize_engine()
 
         results_generator = self.engine.generate(prompt, sampling_params, request_id)
