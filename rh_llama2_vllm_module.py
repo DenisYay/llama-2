@@ -6,7 +6,6 @@
 import runhouse as rh
 from typing import Optional, Any
 import asyncio
-import json
 
 class Llama2Model(rh.Module):
     def __init__(self, model_id="openlm-research/open_llama_13b"):
