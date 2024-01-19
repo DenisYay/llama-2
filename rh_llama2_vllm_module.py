@@ -37,8 +37,6 @@ class Llama2Model(rh.Module):
         """
         if isinstance(sampling_params, dict):
           sampling_params = SamplingParams(**sampling_params)  # Unpack dictionary
-        elif isinstance(sampling_params, str):
-          sampling_params = SamplingParams.from_json(sampling_params)  # Parse JSON string
         else:
           raise ValueError("Invalid type for sampling_params")
         request_id = random_uuid()
