@@ -34,8 +34,18 @@ class Llama2Model(rh.Module):
           self.initialize_engine()
 
         results_generator = self.engine.generate(prompt, sampling_params, request_id)
+        
+        # Streaming case
+        async def stream_results() -> AsyncGenerator[bytes, None]:
+            async for request_output in results_generator:
+                prompt = request_output.prompt
+                text_outputs = [
+                    prompt + output.text for output in request_output.outputs
+                ]
+                yield text_outputs
+
         if stream:
-            return results_generator
+            return stream_results()
     
         # Non streaming case
         final_output = None
@@ -57,7 +67,7 @@ async def main():
     stream = True
     ans = await remote_llama2_model.generate(prompt="Wheels on the bus go", stream=stream, temperature=0.8, top_p=0.95, max_tokens=200)
     print(f"\n\n... type of ans = {type(ans)}\n")
-    async for text_output in ans:
+    for text_output in ans:
         print(f"\n\n... Generated Text:\n{text_output}\n")
 
 
